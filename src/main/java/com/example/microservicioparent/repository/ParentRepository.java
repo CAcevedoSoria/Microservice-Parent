@@ -1,23 +1,25 @@
 package com.example.microservicioparent.repository;
 
 import com.example.microservicioparent.model.Parent;
-import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Date;
-
+/** The interface Parent repository. */
 public interface ParentRepository extends ReactiveMongoRepository<Parent, String> {
 
-    Mono<Parent> findByFullName(String name);
+  /**
+   * Find by full name mono.
+   *
+   * @param name the name
+   * @return the mono
+   */
+  Mono<Parent> findByFullName(String name);
 
-    Mono<Parent> findByDocument(String document);
-
-
-
-
-
-
-
+  /**
+   * Find by document mono.
+   *
+   * @param document the document
+   * @return the mono
+   */
+  Mono<Parent> findByDocument(String document);
 }

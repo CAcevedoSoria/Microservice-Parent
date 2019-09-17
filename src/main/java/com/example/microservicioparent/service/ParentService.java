@@ -4,23 +4,53 @@ import com.example.microservicioparent.model.Parent;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Date;
-
+/** The interface Parent service. */
 public interface ParentService {
 
-    public Flux<Parent> findAll();
+  /**
+   * Find all flux.
+   *
+   * @return the flux
+   */
+  public Flux<Parent> findAll();
 
-    public Mono<Parent> findById(String id);
+  /**
+   * Find by id mono.
+   *
+   * @param id the id
+   * @return the mono
+   */
+  public Mono<Parent> findById(String id);
 
-    public Mono<Parent> save(Parent producto);
+  /**
+   * Save mono.
+   *
+   * @param producto the producto
+   * @return the mono
+   */
+  public Mono<Parent> save(Parent producto);
 
-    public Mono<Void> delete(Parent producto);
+  /**
+   * Delete mono.
+   *
+   * @param producto the producto
+   * @return the mono
+   */
+  public Mono<Void> delete(Parent producto);
 
-    public Mono<Parent>findByDocument(String  document);
+  /**
+   * Find by document mono.
+   *
+   * @param document the document
+   * @return the mono
+   */
+  public Mono<Parent> findByDocument(String document);
 
-
-
-    public Mono<Parent>findFullName(String  name);
-
-
+  /**
+   * Find full name mono.
+   *
+   * @param name the name
+   * @return the mono
+   */
+  public Mono<Parent> findFullName(String name);
 }

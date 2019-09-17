@@ -1,38 +1,34 @@
 package com.example.microservicioparent.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.Date;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
+/** The type Parent. */
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Document(collection = "Parents")
+public class Parent {
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
+  @NotNull
+  @Size(min = 3, max = 25)
+  @Id private String id;
+  private String fullName;
+  private String gender;
 
-    @Document(collection = "Parents")
+  @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
+  private Date createAt;
 
-
-    public class Parent {
-
-
-        @Id
-        private String id;
-        private String fullName;
-        private String gender;
-        @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
-        private Date createAt;
-        private String typeDocument;
-        private String document;
-
-
-
-    }
-
+  private String typeDocument;
+  private String document;
+}
