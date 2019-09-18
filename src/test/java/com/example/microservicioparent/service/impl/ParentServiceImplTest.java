@@ -104,7 +104,12 @@ public class ParentServiceImplTest {
 
 	@Test
 	public void save() {
-
+		Parent parent = new Parent();
+		parent.setFullName("cristohper");
+		parent.setGender("male");
+		parent.setCreateAt(new Date());
+		parent.setTypeDocument("dni");
+		parent.setDocument("736723727");
 
 		when(parentRepository.save(parent)).thenReturn(Mono.just(parent));
 
@@ -144,10 +149,11 @@ public class ParentServiceImplTest {
 		parent2.setTypeDocument("dni");
 		parent2.setDocument("736723727");
 
-		final String document = "736723727";
-		when(parentRepository.findByDocument(document)).thenReturn(Mono.just(parent2));
 
-		Mono<Parent> actual = parentService.findByDocument(document);
+
+		when(parentRepository.findByDocument("736723727")).thenReturn(Mono.just(parent2));
+
+		Mono<Parent> actual = parentService.findByDocument("736723727");
 
 		assertResults(actual,parent2);
 	}
@@ -162,10 +168,10 @@ public class ParentServiceImplTest {
 		parent2.setTypeDocument("dni");
 		parent2.setDocument("736723727");
 
-		final String name = "736723727";
-		when(parentRepository.findByFullName(name)).thenReturn(Mono.just(parent2));
 
-		Mono<Parent> actual = parentService.findFullName(name);
+		when(parentRepository.findByFullName("cristohper")).thenReturn(Mono.just(parent2));
+
+		Mono<Parent> actual = parentService.findFullName("cristohper");
 
 		assertResults(actual,parent2);
 	}

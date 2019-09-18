@@ -37,10 +37,10 @@ public class ParentController {
    * @return the mono
    */
   @PostMapping
-  public Mono<ResponseEntity<Parent>> create(@RequestBody Parent parent) {
+  public Mono<ResponseEntity<Parent>> create(@Valid @RequestBody Parent parent) {
 
     return parentService.save(parent)
-      .map(p -> ResponseEntity.created(URI.create("/api/v1.0".concat(p.getId())))
+      .map(p -> ResponseEntity.created(URI.create("/api/v1.0/parents".concat(p.getId())))
         .contentType(MediaType.APPLICATION_JSON_UTF8).body(p));
 
   }

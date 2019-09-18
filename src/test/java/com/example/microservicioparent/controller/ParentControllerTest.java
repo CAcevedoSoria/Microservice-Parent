@@ -32,11 +32,11 @@ public class ParentControllerTest {
   @Test
   public void create() {
 
-    Parent parent = new Parent( "Flor", "female", new Date(), "dni", "43434343");
+    Parent parent = new Parent( "Angel Acevedo Soria", "male", new Date(), "dni", "98622526");
 
     client
         .post()
-        .uri("/api/v1.0/")
+        .uri("/api/v1.0/parents")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .accept(MediaType.APPLICATION_JSON_UTF8)
         .body(Mono.just(parent), Parent.class)
@@ -78,10 +78,10 @@ public class ParentControllerTest {
   @Test
   public void findById() {
 
-    Parent parent = parentService.findById("Arturo").block();
+    Parent parent = parentService.findById("5d829916801896a5c88bc436").block();
     client
         .get()
-        .uri("/api/v1.0" + "/{id}", Collections.singletonMap("id", parent.getId()))
+        .uri("/api/v1.0/parents" + "/{id}", Collections.singletonMap("id", parent.getId()))
         .accept(MediaType.APPLICATION_JSON_UTF8)
         .exchange()
         .expectStatus()
@@ -101,13 +101,13 @@ public class ParentControllerTest {
   @Test
   public void update() {
 
-    Parent parent = parentService.findFullName("Arturo").block();
+    Parent parent = parentService.findFullName("Humberto Acevedo Ponce").block();
 
-    Parent parentEdit = new Parent("Humberto", "male", new Date(), "dni", "dsdsee");
+    Parent parentEdit = new Parent("Mario Acevedo Ponce", "male", new Date(), "dni", "dsdsee");
 
     client
         .put()
-        .uri("/api/v1.0" + "/{id}", Collections.singletonMap("id", parent.getId()))
+        .uri("/api/v1.0/parents" + "/{id}", Collections.singletonMap("id", parent.getId()))
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .accept(MediaType.APPLICATION_JSON_UTF8)
         .body(Mono.just(parentEdit), Parent.class)
@@ -120,17 +120,17 @@ public class ParentControllerTest {
         .jsonPath("$.id")
         .isNotEmpty()
         .jsonPath("$.id")
-        .isEqualTo("ewewewewewe");
+        .isEqualTo("5d829916801896a5c88bc437");
   }
   /** Find by document. */
   @Test
   public void findByDocument() {
 
-    Parent parent = parentService.findByDocument("zznsahsas").block();
+    Parent parent = parentService.findByDocument("07543124").block();
     client
         .get()
         .uri(
-            "/api/v1.0" + "/document/{document}",
+            "/api/v1.0/parents" + "/document/{document}",
             Collections.singletonMap("document", parent.getDocument()))
         .accept(MediaType.APPLICATION_JSON_UTF8)
         .exchange()
@@ -151,10 +151,10 @@ public class ParentControllerTest {
   @Test
   public void findByFullName() {
 
-    Parent parent = parentService.findFullName("Ana").block();
+    Parent parent = parentService.findFullName("Flor Soria Carpio").block();
     client
         .get()
-        .uri("/api/v1.0" + "/name/{name}", Collections.singletonMap("name", parent.getFullName()))
+        .uri("/api/v1.0/parents" + "/name/{name}", Collections.singletonMap("name", parent.getFullName()))
         .accept(MediaType.APPLICATION_JSON_UTF8)
         .exchange()
         .expectStatus()
@@ -174,10 +174,10 @@ public class ParentControllerTest {
   @Test
   public void eliminar() {
 
-    Parent parent = parentService.findById("193938747575").block();
+    Parent parent = parentService.findById("5d829b8d36ec18668c61990e").block();
     client
         .delete()
-        .uri("/api/v1.0" + "/{id}", Collections.singletonMap("id", parent.getId()))
+        .uri("/api/v1.0/parents" + "/{id}", Collections.singletonMap("id", parent.getId()))
         .exchange()
         .expectStatus()
         .isNoContent()
@@ -186,7 +186,7 @@ public class ParentControllerTest {
 
     client
         .get()
-        .uri("/api/v1.0" + "/{id}", Collections.singletonMap("id", parent.getId()))
+        .uri("/api/v1.0/parents" + "/{id}", Collections.singletonMap("id", parent.getId()))
         .exchange()
         .expectStatus()
         .isNotFound()
