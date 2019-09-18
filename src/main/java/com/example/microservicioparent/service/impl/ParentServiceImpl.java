@@ -25,13 +25,13 @@ public class ParentServiceImpl implements ParentService {
   }
 
   @Override
-  public Mono<Parent> save(Parent producto) {
-    return parentRepository.save(producto);
+  public Mono<Parent> save(Parent parent) {
+    return parentRepository.save(parent);
   }
 
   @Override
-  public Mono<Void> delete(Parent producto) {
-    return parentRepository.delete(producto);
+  public Mono<Void> delete(Parent parent) {
+    return parentRepository.delete(parent);
   }
 
   @Override

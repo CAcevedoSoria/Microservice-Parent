@@ -13,13 +13,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
+import java.text.DateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-/**
- * The type Parent controller test.
- */
+/** The type Parent controller test. */
 @RunWith(SpringRunner.class)
 @AutoConfigureWebTestClient
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -29,13 +28,11 @@ public class ParentControllerTest {
 
   @Autowired private ParentService parentService;
 
-  /**
-	 * Create.
-	 */
-@Test
+  /** Create. */
+  @Test
   public void create() {
 
-    Parent parent = new Parent("3rr3qr3qr", "Flor", "female", new Date(), "dni", "43434343");
+    Parent parent = new Parent( "Flor", "female", new Date(), "dni", "43434343");
 
     client
         .post()
@@ -51,10 +48,8 @@ public class ParentControllerTest {
         .expectBodyList(Parent.class);
   }
 
-  /**
-	 * Find all.
-	 */
-@Test
+  /** Find all. */
+  @Test
   public void findAll() {
 
     client
@@ -79,10 +74,8 @@ public class ParentControllerTest {
             });
   }
 
-  /**
-	 * Find by id.
-	 */
-@Test
+  /** Find by id. */
+  @Test
   public void findById() {
 
     Parent parent = parentService.findById("Arturo").block();
@@ -104,15 +97,13 @@ public class ParentControllerTest {
             });
   }
 
-  /**
-	 * Update.
-	 */
-@Test
+  /** Update. */
+  @Test
   public void update() {
 
     Parent parent = parentService.findFullName("Arturo").block();
 
-    Parent parentEdit = new Parent("ewewewewewe", "Humberto", "male", new Date(), "dni", "dsdsee");
+    Parent parentEdit = new Parent("Humberto", "male", new Date(), "dni", "dsdsee");
 
     client
         .put()
@@ -131,10 +122,8 @@ public class ParentControllerTest {
         .jsonPath("$.id")
         .isEqualTo("ewewewewewe");
   }
-	/**
-	 * Find by document.
-	 */
-@Test
+  /** Find by document. */
+  @Test
   public void findByDocument() {
 
     Parent parent = parentService.findByDocument("zznsahsas").block();
@@ -158,10 +147,8 @@ public class ParentControllerTest {
             });
   }
 
-  /**
-	 * Find by full name.
-	 */
-@Test
+  /** Find by full name. */
+  @Test
   public void findByFullName() {
 
     Parent parent = parentService.findFullName("Ana").block();
@@ -183,32 +170,27 @@ public class ParentControllerTest {
             });
   }
 
+  /** Eliminar. */
+  @Test
+  public void eliminar() {
 
-	/**
-	 * Eliminar.
-	 */
-	@Test
-	public void eliminar() {
+    Parent parent = parentService.findById("193938747575").block();
+    client
+        .delete()
+        .uri("/api/v1.0" + "/{id}", Collections.singletonMap("id", parent.getId()))
+        .exchange()
+        .expectStatus()
+        .isNoContent()
+        .expectBody()
+        .isEmpty();
 
-		Parent parent = parentService.findById("193938747575").block();
-		client
-			.delete()
-			.uri("/api/v1.0" + "/{id}", Collections.singletonMap("id", parent.getId()))
-			.exchange()
-			.expectStatus()
-			.isNoContent()
-			.expectBody()
-			.isEmpty();
-
-		client
-			.get()
-			.uri("/api/v1.0" + "/{id}", Collections.singletonMap("id", parent.getId()))
-			.exchange()
-			.expectStatus()
-			.isNotFound()
-			.expectBody()
-			.isEmpty();
-	}
-
-
+    client
+        .get()
+        .uri("/api/v1.0" + "/{id}", Collections.singletonMap("id", parent.getId()))
+        .exchange()
+        .expectStatus()
+        .isNotFound()
+        .expectBody()
+        .isEmpty();
+  }
 }

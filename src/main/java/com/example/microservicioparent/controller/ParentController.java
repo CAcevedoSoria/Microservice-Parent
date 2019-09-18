@@ -2,11 +2,6 @@ package com.example.microservicioparent.controller;
 
 import com.example.microservicioparent.model.Parent;
 import com.example.microservicioparent.service.ParentService;
-import java.net.URI;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,14 +14,17 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.support.WebExchangeBindException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-
+import javax.validation.Valid;
+import java.net.URI;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /** The type Parent controller. */
-@RequestMapping("/api/v1.0")
+@RequestMapping("/api/v1.0/parents")
 @RestController
 public class ParentController {
 
@@ -35,36 +33,15 @@ public class ParentController {
   /**
    * Create mono.
    *
-   * @param parentmono the parentmono
+   * @param parent the parentmono
    * @return the mono
    */
   @PostMapping
-  public Mono<ResponseEntity<Map<String, Object>>> create(
-      @Valid @RequestBody Mono<Parent> parentmono) {
+  public Mono<ResponseEntity<Parent>> create(@RequestBody Parent parent) {
 
-    Map<String, Object> respuesta = new HashMap<String, Object>();
-
-    return parentmono
-        .flatMap(
-            parent -> {
-              if (parent.getCreateAt() == null) {
-                parent.setCreateAt(new Date());
-              }
-
-              return parentService
-                  .save(parent)
-                  .map(
-                      p -> {
-                        respuesta.put("producto", p);
-                        respuesta.put("mensaje", "Producto creado con éxito");
-                        respuesta.put("timestamp", new Date());
-                        return ResponseEntity.created(URI.create("/api/v1.0".concat(p.getId())))
-                            .contentType(MediaType.APPLICATION_JSON_UTF8)
-                            .body(respuesta);
-                      });
-
-
-            });
+    return parentService.save(parent)
+      .map(p -> ResponseEntity.created(URI.create("/api/v1.0".concat(p.getId())))
+        .contentType(MediaType.APPLICATION_JSON_UTF8).body(p));
 
   }
 
@@ -73,7 +50,7 @@ public class ParentController {
    *
    * @return the mono
    */
-  @GetMapping("/parents")
+  @GetMapping
   public Mono<ResponseEntity<Flux<Parent>>> findAll() {
     return Mono.just(
         ResponseEntity.ok()
