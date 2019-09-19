@@ -2,7 +2,12 @@ package com.example.microservicioparent.controller;
 
 import com.example.microservicioparent.model.Parent;
 import com.example.microservicioparent.service.ParentService;
+import java.net.URI;
+import java.time.LocalDate;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import javax.validation.Valid;
-import java.net.URI;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+
 
 /** The type Parent controller. */
 @RequestMapping("/api/v1.0/parents")
@@ -39,10 +40,13 @@ public class ParentController {
   @PostMapping
   public Mono<ResponseEntity<Parent>> create(@Valid @RequestBody Parent parent) {
 
-    return parentService.save(parent)
-      .map(p -> ResponseEntity.created(URI.create("/api/v1.0/parents".concat(p.getId())))
-        .contentType(MediaType.APPLICATION_JSON_UTF8).body(p));
-
+    return parentService
+        .save(parent)
+        .map(
+            p ->
+                ResponseEntity.created(URI.create("/api/v1.0/parents".concat(p.getId())))
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .body(p));
   }
 
   /**
@@ -80,7 +84,7 @@ public class ParentController {
    * @return the mono
    */
   @PutMapping("/{id}")
-  public Mono<ResponseEntity<Parent>> update(@RequestBody Parent parent, @PathVariable String id) {
+  public Mono<ResponseEntity<Parent>> update(@Valid @RequestBody Parent parent, @PathVariable String id) {
     return parentService
         .findById(id)
         .flatMap(
@@ -94,11 +98,11 @@ public class ParentController {
             })
         .map(
             p ->
-                ResponseEntity.created(URI.create("/api/v1.0".concat(p.getId())))
-                    .contentType(MediaType.APPLICATION_JSON_UTF8)
-                    .body(p))
-        .defaultIfEmpty(ResponseEntity.notFound().build());
+              ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(p))
+      .defaultIfEmpty(ResponseEntity.notFound().build());
   }
+
+
 
   /**
    * Eliminar mono.
@@ -126,7 +130,7 @@ public class ParentController {
    * @return the mono
    */
   @GetMapping("document/{document}")
-  public Mono<ResponseEntity<Parent>> findByDocument(@PathVariable String document) {
+  public Mono<ResponseEntity<Parent>> findByDocument(@Valid @PathVariable String document) {
     return parentService
         .findByDocument(document)
         .map(p -> ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(p))
@@ -145,5 +149,12 @@ public class ParentController {
         .findFullName(name)
         .map(p -> ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(p))
         .defaultIfEmpty(ResponseEntity.notFound().build());
+  }
+
+  @GetMapping("date/{date1}/{date2}")
+  public Flux<Parent>findBybirthdayBetween(
+      @PathVariable("date1") @DateTimeFormat(iso = ISO.DATE) LocalDate date1,
+      @PathVariable("date2") @DateTimeFormat(iso = ISO.DATE) LocalDate date2) {
+    return parentService.findBybirthdayBetween(date1, date2);
   }
 }

@@ -10,12 +10,13 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.reactive.server.FluxExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /** The type Parent controller test. */
@@ -32,7 +33,8 @@ public class ParentControllerTest {
   @Test
   public void create() {
 
-    Parent parent = new Parent( "Angel Acevedo Soria", "male", new Date(), "dni", "98622526");
+    Parent parent =
+        new Parent("Humberto Acevedo Ponce", "male", LocalDate.of(1997, 03, 07), "dni", "398392632");
 
     client
         .post()
@@ -78,7 +80,7 @@ public class ParentControllerTest {
   @Test
   public void findById() {
 
-    Parent parent = parentService.findById("5d829916801896a5c88bc436").block();
+    Parent parent = parentService.findById("5d83de882523ef89b5cd5ed8").block();
     client
         .get()
         .uri("/api/v1.0/parents" + "/{id}", Collections.singletonMap("id", parent.getId()))
@@ -101,9 +103,10 @@ public class ParentControllerTest {
   @Test
   public void update() {
 
-    Parent parent = parentService.findFullName("Humberto Acevedo Ponce").block();
+    Parent parent = parentService.findFullName("Diego Acevedo Soria").block();
 
-    Parent parentEdit = new Parent("Mario Acevedo Ponce", "male", new Date(), "dni", "dsdsee");
+    Parent parentEdit =
+        new Parent("Alejandra Acevedo Soria", "male", LocalDate.of(2000, 01, 22), "dni", "dsdsee");
 
     client
         .put()
@@ -120,13 +123,14 @@ public class ParentControllerTest {
         .jsonPath("$.id")
         .isNotEmpty()
         .jsonPath("$.id")
-        .isEqualTo("5d829916801896a5c88bc437");
+        .isEqualTo("5d83e24636ec1860c022d39b");
+
   }
   /** Find by document. */
   @Test
   public void findByDocument() {
 
-    Parent parent = parentService.findByDocument("07543124").block();
+    Parent parent = parentService.findByDocument("28762786").block();
     client
         .get()
         .uri(
@@ -154,7 +158,9 @@ public class ParentControllerTest {
     Parent parent = parentService.findFullName("Flor Soria Carpio").block();
     client
         .get()
-        .uri("/api/v1.0/parents" + "/name/{name}", Collections.singletonMap("name", parent.getFullName()))
+        .uri(
+            "/api/v1.0/parents" + "/name/{name}",
+            Collections.singletonMap("name", parent.getFullName()))
         .accept(MediaType.APPLICATION_JSON_UTF8)
         .exchange()
         .expectStatus()
@@ -174,7 +180,7 @@ public class ParentControllerTest {
   @Test
   public void eliminar() {
 
-    Parent parent = parentService.findById("5d829b8d36ec18668c61990e").block();
+    Parent parent = parentService.findById("5d83de882523ef89b5cd5ed7").block();
     client
         .delete()
         .uri("/api/v1.0/parents" + "/{id}", Collections.singletonMap("id", parent.getId()))
@@ -193,4 +199,6 @@ public class ParentControllerTest {
         .expectBody()
         .isEmpty();
   }
+
+
 }
